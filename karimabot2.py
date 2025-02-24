@@ -3,11 +3,11 @@ from telebot import types
 import sqlite3
 import requests  
 
-BOT_TOKEN = ' Ваш токен '
+BOT_TOKEN = 'Ваш токен'
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
-# --- Настройка базы данных ---
+
 DATABASE_NAME = 'karima_bot.db'
 
 def create_table():
@@ -28,8 +28,7 @@ def create_table():
 
 create_table()
 
-# --- Состояния бота ---
-user_data = {}  # Словарь для хранения данных пользователя
+user_data = {}  
 
 STATES = {
     'START': 0,
@@ -49,7 +48,7 @@ def get_user_state(user_id):
 def update_user_state(user_id, state):
     user_data[user_id]['state'] = state
 
-# --- Функции для работы с базой данных ---
+
 def save_request_to_db(full_name, phone_number, email_address, location, needs_consultation):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
@@ -61,7 +60,7 @@ def save_request_to_db(full_name, phone_number, email_address, location, needs_c
     conn.close()
     print("Заявка успешно сохранена в базу данных!")
 
-# --- Функции валидации ---
+
 def validate_email(email):
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     return(pattern, email) is not None
@@ -70,7 +69,6 @@ def validate_phone_number(phone):
     pattern = r"^\+?[0-9]{10,15}$"  
     return(pattern, phone) is not None
 
-# --- Обработчики команд ---
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -166,7 +164,7 @@ def confirm_data(message):
     else:
         bot.send_message(message.chat.id, "Пожалуйста, выберите 'Подтвердить' или 'Отменить'.", reply_markup=types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True).add('Подтвердить', 'Отменить'))
 
-    # Сбрасываем состояние
+    
     update_user_state(user_id, STATES['START'])
     user_data[user_id] = {}
 
