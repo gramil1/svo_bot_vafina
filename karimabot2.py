@@ -73,7 +73,7 @@ def validate_phone_number(phone):
 @bot.message_handler(commands=['start'])
 def start(message):
     user_id = message.from_user.id
-    user_data[user_id] = {} # Очищаем данные пользователя при старте
+    user_data[user_id] = {} 
     update_user_state(user_id, STATES['START'])
     bot.send_message(message.chat.id, "Здравствуйте! Я бот для приема заявок на ремонт компьютеров.\nПожалуйста, заполните форму, чтобы мы могли вам помочь.\n\nВведите ваше ФИО:")
     update_user_state(message.from_user.id, STATES['FULL_NAME'])
@@ -116,7 +116,7 @@ def get_location(message):
     user_id = message.from_user.id
     user_data[user_id]['location'] = message.text
 
-    # --- Нужна консультация? ---
+    
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
     markup.add('Да', 'Нет')
 
@@ -132,7 +132,7 @@ def get_consultation(message):
     else:
         user_data[user_id]['needs_consultation'] = 0
 
-    # --- Подтверждение данных ---
+    
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
     markup.add('Подтвердить', 'Отменить')
 
@@ -151,7 +151,7 @@ def get_consultation(message):
 def confirm_data(message):
     user_id = message.from_user.id
     if message.text == 'Подтвердить':
-        # Сохраняем данные в базу данных
+        
         save_request_to_db(user_data[user_id]['full_name'],
                            user_data[user_id]['phone_number'],
                            user_data[user_id]['email_address'],
@@ -169,6 +169,6 @@ def confirm_data(message):
     user_data[user_id] = {}
 
 
-# --- Запуск бота ---
+
 if __name__ == '__main__':
     bot.polling(none_stop=True)
